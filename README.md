@@ -8,7 +8,7 @@ Whether you're a nostalgic coder or a modern enthusiast, `doodlekit` allows you 
 
 ## Features
 
-- **Simple API**: easy-to-use functions to create [stunning animations](https://github.com/lucasepe/doodles)
+- **Simple API**: easy-to-use functions to create [stunning animations](https://github.com/lucasepe/doodles/GALLERY_1.md)
 - **Composable Scenes**: you can compose one or more existing scenes with yours
 - **Flexible Configuration**: options to set frame rate, output directory, and more.
 - **Open Source**: contribute and expand the framework with your own scenes and animations.
