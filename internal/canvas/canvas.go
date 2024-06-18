@@ -147,6 +147,12 @@ func (ctx *Canvas) Pix(x, y int) {
 	ctx.img.SetColorIndex(int(tx), int(ty), ctx.colorIndex)
 }
 
+func (ctx *Canvas) At(x, y int) int {
+	tx, ty := ctx.TransformPoint(float64(x), float64(y))
+	c := ctx.img.ColorIndexAt(int(tx), int(ty))
+	return int(c)
+}
+
 func (ctx *Canvas) Record() {
 	var dst *image.Paletted
 	if !ctx.x2 {
