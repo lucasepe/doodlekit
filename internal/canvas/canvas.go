@@ -71,7 +71,7 @@ func (ctx *Canvas) Color(idx int) {
 		return
 	}
 
-	ctx.colorIndex = uint8(idx % int(len(ctx.img.Palette)-1))
+	ctx.colorIndex = uint8(idx % len(ctx.img.Palette))
 }
 
 func (ctx *Canvas) Cls(idx int) {
