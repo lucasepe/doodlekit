@@ -14,8 +14,8 @@ func New() RNG {
 
 type RNG interface {
 	Seed(seed int)
-	Rnd(max float64) float64
-	RndI(max int) int
+	Rnd(min, max float64) float64
+	RndI(min, max int) int
 }
 
 var _ RNG = (*rng)(nil)
@@ -31,13 +31,17 @@ func (r *rng) Seed(seed int) {
 	r.src = rand.New(rand.NewSource(int64(seed)))
 }
 
-func (r *rng) Rnd(max float64) float64 {
-	return r.src.Float64() * max
+func (r *rng) Rnd(min, max float64) float64 {
+	if min > max {
+		min, max = max, min
+	}
+
+	return min + r.src.Float64()*(max-min)
 }
 
-func (r *rng) RndI(max int) int {
-	if max <= 0 {
-		return 0
+func (r *rng) RndI(min, max int) int {
+	if min > max {
+		min, max = max, min
 	}
-	return r.src.Intn(max + 1)
+	return r.src.Intn(max+1-min) + min
 }

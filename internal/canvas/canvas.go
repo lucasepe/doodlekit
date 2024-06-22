@@ -39,7 +39,7 @@ func New(img *image.Paletted) Canvas {
 	res := Canvas{
 		img:      img,
 		anim:     &gif.GIF{},
-		fontFace: MustLoadFont(fonts.Ic8x16u()).NewFace(),
+		fontFace: MustLoadFont(fonts.Pc8x8()).NewFace(),
 		x2:       false,
 		matrix:   Identity(),
 	}
@@ -92,12 +92,12 @@ func (ctx *Canvas) MeasureString(s string) (int, int) {
 	}
 	a := d.MeasureString(s)
 	tw := int(a >> 6)
-	th := unfixi(ctx.fontFace.Metrics().Height)
+	th := UnfixI(ctx.fontFace.Metrics().Height)
 	return tw, th
 }
 
 func (ctx *Canvas) Print(s string, x, y int) {
-	ax, ay := 0.0, -0.5
+	ax, ay := 0.0, 0.0
 	w, h := ctx.MeasureString(s)
 	x1 := float64(x) - ax*float64(w)
 	y1 := float64(y) - ay*float64(h)
@@ -110,8 +110,8 @@ func (ctx *Canvas) drawString(s string, x, y float64) {
 		Src:  image.NewUniform(ctx.img.Palette[ctx.colorIndex]),
 		Face: ctx.fontFace,
 		Dot: fixed.Point26_6{
-			X: fix(x),
-			Y: fix(y),
+			X: Fix(x),
+			Y: Fix(y),
 		},
 	}
 
