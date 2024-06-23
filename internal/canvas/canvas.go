@@ -90,8 +90,7 @@ func (ctx *Canvas) MeasureString(s string) (int, int) {
 	d := &font.Drawer{
 		Face: ctx.fontFace,
 	}
-	a := d.MeasureString(s)
-	tw := int(a >> 6)
+	tw := d.MeasureString(s).Ceil()
 	th := UnfixI(ctx.fontFace.Metrics().Height)
 	return tw, th
 }
