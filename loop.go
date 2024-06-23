@@ -42,6 +42,12 @@ func OutDir(dir string) Option {
 	}
 }
 
+func X2() Option {
+	return func(l *demoLoop) {
+		l.x2 = true
+	}
+}
+
 type Scene interface {
 	Init(ctx context.Context)
 	Update(ctx context.Context, dt float64)
