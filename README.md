@@ -1,6 +1,6 @@
 # `doodlekit`
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/lucasepe/doodlekit)](https://goreportcard.com/report/github.com/lucasepe/doodlekit) <!--&nbsp; &nbsp; ![Coverage](./coverage_badge.svg)-->
+[![Go Report Card](https://goreportcard.com/badge/github.com/lucasepe/doodlekit)](https://goreportcard.com/report/github.com/lucasepe/doodlekit) ![Coverage](./coverage_badge.svg)
 
 
 Welcome to `doodlekit`, an open-source Golang framework for creating animated doodles like old school demoscenes and crack intros. 

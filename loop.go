@@ -12,7 +12,7 @@ func NewLoop(id string, opts ...Option) Loop {
 		id:        id,
 		fps:       25.0,
 		stopAfter: 6,
-		x2:        false,
+		resize:    1,
 	}
 
 	for _, o := range opts {
@@ -42,9 +42,9 @@ func OutDir(dir string) Option {
 	}
 }
 
-func X2() Option {
+func Resize(sf int) Option {
 	return func(l *demoLoop) {
-		l.x2 = true
+		l.resize = sf
 	}
 }
 
@@ -65,14 +65,13 @@ type demoLoop struct {
 	fps       float64
 	stopAfter int
 	outdir    string
-	x2        bool
+	resize    int
 }
 
 func (dl *demoLoop) Run(fx []Scene) {
 	opts := []option{}
-	if dl.x2 {
-		opts = append(opts, x2())
-	}
+	opts = append(opts, resize(dl.resize))
+
 	ctx := newContext(opts...)
 
 	for _, ds := range fx {

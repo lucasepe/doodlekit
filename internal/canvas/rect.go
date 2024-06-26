@@ -12,7 +12,8 @@ package canvas
 
 (x1,y2)          (x2,y2)
 */
-func (ctx *Canvas) Rect(x1, y1, x2, y2 int) {
+func (ctx *Canvas) Rect(x, y, w, h int) {
+	x1, y1, x2, y2 := x, y, x+w, y+h
 	ctx.Line(x1, y1, x2, y1)
 	ctx.Line(x2, y1, x2, y2)
 	ctx.Line(x2, y2, x1, y2)
@@ -20,28 +21,17 @@ func (ctx *Canvas) Rect(x1, y1, x2, y2 int) {
 }
 
 // RectFill draws a filled rectangle given a point, width and height
-func (ctx *Canvas) RectFill(x1, y1, x2, y2 int) {
-	if x1 > x2 {
-		x1, x2 = x2, x1
-	}
-	if y1 > y2 {
-		y1, y2 = y2, y1
-	}
+func (ctx *Canvas) RectFill(x, y, w, h int) {
+	x1, y1, x2, y2 := x, y, x+w, y+h
 
 	for i := x1; i <= x2; i++ {
 		ctx.Line(i, y1, i, y2)
 	}
 }
 
-func (ctx *Canvas) RoundRect(x1, y1, x2, y2, r int) {
-	if x1 > x2 {
-		x1, x2 = x2, x1
-	}
-	if y1 > y2 {
-		y1, y2 = y2, y1
-	}
+func (ctx *Canvas) RoundRect(x, y, w, h, r int) {
+	x1, y1, x2, y2 := x, y, x+w, y+h
 
-	w, h := (x2 - x1), (y2 - y1)
 	maxRadius := w / 2
 	if w < h {
 		maxRadius = h / 2
@@ -62,15 +52,9 @@ func (ctx *Canvas) RoundRect(x1, y1, x2, y2, r int) {
 	ctx.drawCircleHelper(x1+r, y2-r-1, r, uint8(8))
 }
 
-func (ctx *Canvas) RoundRectFill(x1, y1, x2, y2, r int) {
-	if x1 > x2 {
-		x1, x2 = x2, x1
-	}
-	if y1 > y2 {
-		y1, y2 = y2, y1
-	}
+func (ctx *Canvas) RoundRectFill(x, y, w, h, r int) {
+	x1, y1, x2, y2 := x, y, x+w, y+h
 
-	w, h := (x2 - x1), (y2 - y1)
 	maxRadius := w / 2
 	if w < h {
 		maxRadius = h / 2

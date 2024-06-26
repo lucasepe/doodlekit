@@ -10,6 +10,7 @@ import (
 
 func Example_gfx_Rect() {
 	pal := color.Palette{
+		color.NRGBA{0x00, 0x00, 0x00, 0x00},
 		color.NRGBA{0x00, 0x00, 0x00, 0xFF},
 		color.NRGBA{0xFF, 0xFF, 0xFF, 0xFF},
 	}
@@ -22,7 +23,7 @@ func Example_gfx_Rect() {
 	gc.Translate(4, 5)
 
 	gc.Color(1)
-	gc.Rect(-2, -4, 2, 4)
+	gc.Rect(-2, -4, 4, 8)
 	gc.Identity()
 
 	for y := 0; y < dst.Bounds().Dy(); y++ {
@@ -52,6 +53,7 @@ func Example_gfx_Rect() {
 
 func Example_gfx_Rect_2() {
 	pal := color.Palette{
+		color.NRGBA{0x00, 0x00, 0x00, 0x00},
 		color.NRGBA{0x00, 0x00, 0x00, 0xFF},
 		color.NRGBA{0xFF, 0xFF, 0xFF, 0xFF},
 	}
@@ -64,7 +66,7 @@ func Example_gfx_Rect_2() {
 	gc.Translate(5, 3)
 
 	gc.Color(1)
-	gc.Rect(-4, -2, 4, 2)
+	gc.Rect(-4, -2, 8, 4)
 
 	gc.Identity()
 
@@ -91,6 +93,7 @@ func Example_gfx_Rect_2() {
 
 func Example_gfx_RectFill() {
 	pal := color.Palette{
+		color.NRGBA{0x00, 0x00, 0x00, 0x00},
 		color.NRGBA{0x00, 0x00, 0x00, 0xFF},
 		color.NRGBA{0xFF, 0xFF, 0xFF, 0xFF},
 	}
@@ -103,7 +106,7 @@ func Example_gfx_RectFill() {
 	gc.Translate(4, 5)
 
 	gc.Color(1)
-	gc.RectFill(-2, -4, 2, 4)
+	gc.RectFill(-2, -4, 4, 8)
 
 	gc.Identity()
 
@@ -134,6 +137,7 @@ func Example_gfx_RectFill() {
 
 func Example_gfx_RoundRect() {
 	pal := color.Palette{
+		color.NRGBA{0x00, 0x00, 0x00, 0x00},
 		color.NRGBA{0x00, 0x00, 0x00, 0xFF},
 		color.NRGBA{0xFF, 0xFF, 0xFF, 0xFF},
 	}
@@ -146,7 +150,7 @@ func Example_gfx_RoundRect() {
 	gc.Translate(8, 5)
 
 	gc.Color(1)
-	gc.RoundRect(-6, -4, 6, 4, 2)
+	gc.RoundRect(-6, -4, 12, 8, 2)
 
 	gc.Identity()
 
@@ -177,6 +181,7 @@ func Example_gfx_RoundRect() {
 
 func Example_gfx_RoundRectFill() {
 	pal := color.Palette{
+		color.NRGBA{0x00, 0x00, 0x00, 0x00},
 		color.NRGBA{0x00, 0x00, 0x00, 0xFF},
 		color.NRGBA{0xFF, 0xFF, 0xFF, 0xFF},
 	}
@@ -189,7 +194,7 @@ func Example_gfx_RoundRectFill() {
 	gc.Translate(8, 5)
 
 	gc.Color(1)
-	gc.RoundRectFill(-6, -4, 6, 4, 2)
+	gc.RoundRectFill(-6, -4, 12, 8, 2)
 
 	gc.Identity()
 

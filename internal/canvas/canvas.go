@@ -13,8 +13,8 @@ import (
 )
 
 const (
-	defaultWidth  = 160
-	defaultHeight = 160
+	defaultWidth  = 64
+	defaultHeight = 64
 	defaultDelay  = 5
 )
 
@@ -27,27 +27,28 @@ const (
 )
 
 type Canvas struct {
-	img        *image.Paletted
-	colorIndex uint8
-	x2         bool
-	fontFace   font.Face
-	anim       *gif.GIF
-	matrix     Matrix
+	img          *image.Paletted
+	fgColorIndex uint8
+	bgColorIndex uint8
+	resize       int
+	fontFace     font.Face
+	anim         *gif.GIF
+	matrix       Matrix
 }
 
-func New(img *image.Paletted) Canvas {
-	res := Canvas{
+func New(img *image.Paletted) *Canvas {
+	res := &Canvas{
 		img:      img,
 		anim:     &gif.GIF{},
-		fontFace: MustLoadFont(fonts.Pc8x8()).NewFace(),
-		x2:       false,
+		fontFace: MustLoadFont(fonts.Micro()).NewFace(),
+		resize:   1,
 		matrix:   Identity(),
 	}
 
 	if res.img == nil {
 		res.img = image.NewPaletted(
 			image.Rect(0, 0, defaultWidth, defaultHeight),
-			PalettePICO8,
+			doodleKitPalette(),
 		)
 	}
 
@@ -57,8 +58,16 @@ func New(img *image.Paletted) Canvas {
 	return res
 }
 
-func (ctx *Canvas) X2() {
-	ctx.x2 = true
+func (ctx *Canvas) Resize(sf int) {
+	if sf <= 0 {
+		sf = 1
+	}
+
+	if sf > 10 {
+		sf = 10
+	}
+
+	ctx.resize = sf
 }
 
 func (ctx *Canvas) Width() int { return ctx.img.Rect.Dx() }
@@ -66,21 +75,25 @@ func (ctx *Canvas) Width() int { return ctx.img.Rect.Dx() }
 func (ctx *Canvas) Height() int { return ctx.img.Rect.Dy() }
 
 func (ctx *Canvas) Color(idx int) {
-	if idx <= 0 {
-		ctx.colorIndex = uint8(0)
+	if idx < 0 {
+		ctx.fgColorIndex = uint8(0)
 		return
 	}
 
-	ctx.colorIndex = uint8(idx % len(ctx.img.Palette))
+	ctx.fgColorIndex = uint8(idx % len(ctx.img.Palette))
 }
 
 func (ctx *Canvas) Cls(idx int) {
-	ctx.Color(idx)
+	if idx < 0 {
+		ctx.bgColorIndex = uint8(0)
+	} else {
+		ctx.bgColorIndex = uint8(idx % len(ctx.img.Palette))
+	}
 
 	draw.Draw(
 		ctx.img,
 		ctx.img.Bounds(),
-		image.NewUniform(ctx.img.Palette[ctx.colorIndex]),
+		image.NewUniform(ctx.img.Palette[ctx.bgColorIndex]),
 		image.Point{},
 		draw.Src,
 	)
@@ -96,7 +109,7 @@ func (ctx *Canvas) MeasureString(s string) (int, int) {
 }
 
 func (ctx *Canvas) Print(s string, x, y int) {
-	ax, ay := 0.0, 0.0
+	ax, ay := 0.0, -1.0
 	w, h := ctx.MeasureString(s)
 	x1 := float64(x) - ax*float64(w)
 	y1 := float64(y) - ay*float64(h)
@@ -106,7 +119,7 @@ func (ctx *Canvas) Print(s string, x, y int) {
 func (ctx *Canvas) drawString(s string, x, y float64) {
 	d := &font.Drawer{
 		Dst:  ctx.img,
-		Src:  image.NewUniform(ctx.img.Palette[ctx.colorIndex]),
+		Src:  image.NewUniform(ctx.img.Palette[ctx.fgColorIndex]),
 		Face: ctx.fontFace,
 		Dot: fixed.Point26_6{
 			X: Fix(x),
@@ -143,7 +156,7 @@ func (ctx *Canvas) drawString(s string, x, y float64) {
 
 func (ctx *Canvas) Pix(x, y int) {
 	tx, ty := ctx.TransformPoint(float64(x), float64(y))
-	ctx.img.SetColorIndex(int(tx), int(ty), ctx.colorIndex)
+	ctx.img.SetColorIndex(int(tx), int(ty), ctx.fgColorIndex)
 }
 
 func (ctx *Canvas) At(x, y int) int {
@@ -154,16 +167,22 @@ func (ctx *Canvas) At(x, y int) int {
 
 func (ctx *Canvas) Record() {
 	var dst *image.Paletted
-	if !ctx.x2 {
+	if ctx.resize > 1 {
+		dst = scaledImage(ctx.img, ctx.resize)
+	} else {
 		dst = image.NewPaletted(ctx.img.Bounds(), ctx.img.Palette)
 		draw.Draw(dst, dst.Bounds(), ctx.img, image.Point{}, draw.Src)
-	} else {
-		dst = scaledImage(ctx.img, 2)
 	}
 
 	ctx.anim.Image = append(ctx.anim.Image, dst)
 	ctx.anim.Delay = append(ctx.anim.Delay, defaultDelay)
 	ctx.anim.Disposal = append(ctx.anim.Disposal, gif.DisposalBackground)
+}
+
+func (ctx *Canvas) Reset() {
+	ctx.anim.Image = nil
+	ctx.anim.Delay = nil
+	ctx.anim.Disposal = nil
 }
 
 func (ctx *Canvas) Save(fn string) error {

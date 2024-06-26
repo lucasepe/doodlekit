@@ -10,6 +10,7 @@ import (
 
 func Example_canvas_Circ() {
 	pal := color.Palette{
+		color.NRGBA{0x00, 0x00, 0x00, 0x00},
 		color.NRGBA{0x00, 0x00, 0x00, 0xFF},
 		color.NRGBA{0xFF, 0xFF, 0xFF, 0xFF},
 	}
@@ -17,10 +18,9 @@ func Example_canvas_Circ() {
 	dst := image.NewPaletted(image.Rect(0, 0, 9, 9), pal)
 
 	gc := canvas.New(dst)
-	gc.Cls(0)
-
 	gc.Translate(4, 4)
 
+	gc.Cls(0)
 	gc.Color(1)
 	gc.Circ(0, 0, 2)
 
@@ -51,6 +51,7 @@ func Example_canvas_Circ() {
 
 func Example_canvas_CircFill() {
 	pal := color.Palette{
+		color.NRGBA{0x00, 0x00, 0x00, 0x00},
 		color.NRGBA{0x00, 0x00, 0x00, 0xFF},
 		color.NRGBA{0xFF, 0xFF, 0xFF, 0xFF},
 	}

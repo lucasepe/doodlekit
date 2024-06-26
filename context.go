@@ -10,8 +10,8 @@ import (
 // Canvas return the drawing context pointer from the context.
 func Canvas(ctx context.Context) *canvas.Canvas {
 	v := ctx.Value(contextKeyCanvas)
-	if val, ok := v.(canvas.Canvas); ok {
-		return &val
+	if val, ok := v.(*canvas.Canvas); ok {
+		return val
 	}
 	return nil
 }
@@ -38,16 +38,16 @@ var (
 
 type option func(*canvas.Canvas)
 
-func x2() option {
+func resize(sf int) option {
 	return func(gc *canvas.Canvas) {
-		gc.X2()
+		gc.Resize(sf)
 	}
 }
 
 func newContext(opts ...option) context.Context {
 	gc := canvas.New(nil)
 	for _, fn := range opts {
-		fn(&gc)
+		fn(gc)
 	}
 
 	ctx := context.WithValue(context.Background(), contextKeyCanvas, gc)
